@@ -16,3 +16,11 @@ def open_account(request):
     return render(request, 'open_account.html')
 
 
+def open_account(request):
+    if request.method == 'POST':
+        pass
+    return render(request, 'open_account.html')
+
+
+def contact(request):
+    return render(request, 'clients.html')
