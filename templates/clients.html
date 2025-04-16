@@ -3,6 +3,38 @@
 {% block title %}Клиенты{% endblock %}
 
 {% block content %}
-<h2>Клиенты</h2>
-<p>ККККК</p>
+<h1>Список клиентов</h1>
+
+<!-- Форма для поиска -->
+<form method="GET" action="{% url 'clients' %}">
+    <input type="text" name="q" placeholder="Поиск по ФИО" value="{{ query }}">
+    <button type="submit">Искать</button>
+</form>
+
+<!-- Список клиентов -->
+<ul>
+    {% for passport_key, client_group in grouped_clients.items %}
+        <li>
+            <strong><a href="{% url 'client_detail' client_id=client_group.clients.0.id %}">{{ client_group.clients.0.full_name }}</a></strong><br>
+            Телефон: {{ client_group.clients.0.phone }}<br>
+            Email: {{ client_group.clients.0.email }}<br>
+            Паспорт: {{ passport_key }}<br>
+            Счета:
+                {% if client_group.accounts %}
+                    {{ client_group.accounts|join:", " }}
+                {% else %}
+                    Нет открытых счетов
+                {% endif %}
+            <br>
+        </li>
+    {% empty %}
+        <li>Нет клиентов для отображения</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
+
+
+
+
+

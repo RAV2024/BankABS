@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Детали счёта{% endblock %}
+
+{% block content %}
+<h1>Детали счёта</h1>
+
+<p><strong>Номер счёта:</strong> {{ account.account_number }}</p>
+<p><strong>Валюта:</strong> {{ account.currency }}</p>
+<p><strong>Цель открытия счёта:</strong> {{ account.purpose }}</p>
+<p><strong>Дата открытия счёта:</strong> {{ account.created_at }}</p>
+
+<!-- Ссылка назад на страницу клиента -->
+<a href="{% url 'client_detail' client_id=account.client.id %}">Назад к деталям клиента</a>
+{% endblock %}

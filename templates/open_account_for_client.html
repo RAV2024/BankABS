@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Открыть счёт{% endblock %}
+
+{% block content %}
+<h2>Открытие нового счёта для {{ client.full_name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Открыть счёт</button>
+</form>
+
+<a href="{% url 'client_detail' client.id %}">Назад к клиенту</a>
+{% endblock %}

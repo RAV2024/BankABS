@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Данные клиента{% endblock %}
+
+{% block content %}
+<h1>Данные клиента</h1>
+
+<!-- Информация о клиенте -->
+<p><strong>ФИО:</strong> {{ client.full_name }}</p>
+<p><strong>Дата рождения:</strong> {{ client.birth_date }}</p>
+<p><strong>Адрес регистрации:</strong> {{ client.registration_address }}</p>
+<p><strong>Серия паспорта:</strong> {{ client.passport_series }}</p>
+<p><strong>Номер паспорта:</strong> {{ client.passport_number }}</p>
+<p><strong>Дата выдачи паспорта:</strong> {{ client.passport_issued_date }}</p>
+<p><strong>Кем выдан паспорт:</strong> {{ client.passport_issued_by }}</p>
+<p><strong>Количество детей:</strong> {{ client.children }}</p>
+<p><strong>Телефон:</strong> {{ client.phone }}</p>
+<p><strong>Email:</strong> {{ client.email }}</p>
+<p><strong>Должность:</strong> {{ client.job_title }}</p>
+<p><strong>Место работы:</strong> {{ client.job_place }}</p>
+
+<h3>Счета клиента</h3>
+<ul>
+    {% for account in client.accounts.all %}
+        <li>
+            <a href="{% url 'account_detail' account_id=account.id %}">{{ account.account_number }}</a> — {{ account.currency }} — {{ account.purpose }}
+        </li>
+    {% empty %}
+        <li>Нет открытых счетов</li>
+    {% endfor %}
+</ul>
+
+<!-- Кнопка для открытия нового счёта -->
+<a href="{% url 'open_account_for_client' client.id %}">Открыть новый счёт</a>
+
+<!-- Ссылка назад на список клиентов -->
+<a href="{% url 'clients' %}">Назад к списку клиентов</a>
+{% endblock %}

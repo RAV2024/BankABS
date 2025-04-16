@@ -1,20 +1,94 @@
 {% extends "base.html" %}
- {% load static %}
-{% block title %}Открытие счета{% endblock %}
+{% load static %}
+
+{% block title %}Открытие счёта{% endblock %}
 
 {% block content %}
-<h2>Открытие счета</h2>
-<form method="POST">
+  <h1>Открыть счёт для клиента</h1>
+
+  <form method="post">
     {% csrf_token %}
-    <label for="full_name">ФИО:</label>
-    <input type="text" id="full_name" name="full_name" required>
-    
-    <label for="passport_number">Номер паспорта:</label>
-    <input type="text" id="passport_number" name="passport_number" required>
-    
-    <label for="expiration_date">Срок действия паспорта:</label>
-    <input type="date" id="expiration_date" name="expiration_date" required>
-    
-    <button type="submit">Открыть счет</button>
-</form>
+
+    <!-- Паспорт -->
+    <div>
+      <label for="{{ client_form.passport_series.id_for_label }}">Серия паспорта:</label>
+      {{ client_form.passport_series }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.passport_number.id_for_label }}">Номер паспорта:</label>
+      {{ client_form.passport_number }}
+    </div>
+
+    <!-- Остальные поля, если клиент новый -->
+    <div>
+      <label for="{{ client_form.full_name.id_for_label }}">ФИО:</label>
+      {{ client_form.full_name }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.birth_date.id_for_label }}">Дата рождения:</label>
+      {{ client_form.birth_date }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.registration_address.id_for_label }}">Адрес регистрации:</label>
+      {{ client_form.registration_address }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.passport_issued_date.id_for_label }}">Дата выдачи паспорта:</label>
+      {{ client_form.passport_issued_date }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.passport_issued_by.id_for_label }}">Кем выдан паспорт:</label>
+      {{ client_form.passport_issued_by }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.children.id_for_label }}">Количество детей:</label>
+      {{ client_form.children }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.phone.id_for_label }}">Телефон:</label>
+      {{ client_form.phone }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.email.id_for_label }}">Электронная почта:</label>
+      {{ client_form.email }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.job_title.id_for_label }}">Должность:</label>
+      {{ client_form.job_title }}
+    </div>
+
+    <div>
+      <label for="{{ client_form.job_place.id_for_label }}">Место работы:</label>
+      {{ client_form.job_place }}
+    </div>
+
+    <div>
+      <label for="{{ account_form.currency.id_for_label }}">Валюта счёта:</label>
+      {{ account_form.currency }}
+    </div>
+
+    <div>
+      <label for="{{ account_form.purpose.id_for_label }}">Цель открытия счёта (банковская):</label>
+      {{ account_form.purpose }}
+    </div>
+
+    <button type="submit">Открыть счёт</button>
+  </form>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}
