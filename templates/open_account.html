@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+ {% load static %}
+{% block title %}Открытие счета{% endblock %}
+
+{% block content %}
+<h2>Открытие счета</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="full_name">ФИО:</label>
+    <input type="text" id="full_name" name="full_name" required>
+    
+    <label for="passport_number">Номер паспорта:</label>
+    <input type="text" id="passport_number" name="passport_number" required>
+    
+    <label for="expiration_date">Срок действия паспорта:</label>
+    <input type="date" id="expiration_date" name="expiration_date" required>
+    
+    <button type="submit">Открыть счет</button>
+</form>
+{% endblock %}
