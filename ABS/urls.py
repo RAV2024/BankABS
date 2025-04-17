@@ -5,8 +5,8 @@ from myapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('open_account/', views.open_account, name='open_account'),
-    path('about/', views.about, name='about'),
-    path('contact/', views.contact, name='contact'),
-    path('clients/', views.contact, name='clients'),
+
+    path('clients/', views.clients_list, name='clients_list'),
+    path('clients/add/', views.add_client, name='add_client'),
+    path('clients/<int:client_id>/', views.client_detail, name='client_detail'),
 ]

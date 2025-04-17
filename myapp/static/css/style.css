@@ -69,10 +69,225 @@ nav ul li a:focus {
     outline: none;
 }
 
-/* ----- */
+/* clients */
+
+.page-wrapper {
+    padding: 30px;
+}
+
+.content-wrapper-clients {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.table-section {
+    flex: 0 0 80%;
+}
+
+.button-section {
+    flex: 0 0 20%;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
+}
+
+.clients-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.clients-table a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: 500;
+}
 
 
+.clients-table th,
+.clients-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
 
+.clients-table thead {
+    background-color: #f2f2f2;
+}
+
+.add-client-button {
+    padding: 10px 10px 10px 10px;
+    margin-top: 40px;
+    background-color: #FF5722;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.add-client-button:hover {
+    background-color: #FF8C00;
+}
+
+
+.passport-search-form {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.passport-search-form input {
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.passport-search-form button {
+    padding: 8px 16px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.passport-search-form button:hover {
+    background-color: #1976D2;
+}
+
+
+/* add client */
+
+.form-wrapper {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px 30px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.form-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.client-form p {
+    margin-bottom: 15px;
+}
+
+.client-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.client-form input[type="text"],
+.client-form input[type="number"],
+.client-form input[type="email"],
+.client-form select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-save {
+    padding: 10px 20px;
+    background-color: #FF5722;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-save:hover {
+    background-color: #FF8C00;
+}
+
+.btn-cancel {
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    line-height: 32px;
+}
+
+.btn-cancel:hover {
+    background-color: #bbb;
+}
+
+/* clients details */
+
+.client-detail {
+    max-width: 700px;
+    background-color: #ffffff;
+    margin: 40px auto;
+    padding: 30px 40px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.client-detail h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 26px;
+}
+
+.client-detail ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.client-detail li {
+    padding: 12px 0;
+    border-bottom: 1px solid #e6e6e6;
+    font-size: 16px;
+    display: flex;
+}
+
+.client-detail li strong {
+    min-width: 160px;
+    font-weight: 600;
+    color: #34495e;
+    display: inline-block;
+}
+
+.client-detail a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #3498db;
+    font-weight: 500;
+}
+
+.client-detail a:hover {
+    text-decoration: underline;
+    color: #2c80b4;
+}
 
 /* ----- */
 

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Добавление клиента{% endblock %}
+
+{% block content %}
+    <div class="form-wrapper">
+        <h2 class="form-title">Добавить клиента</h2>
+
+        <form method="post" class="client-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-buttons">
+                <button type="submit" class="btn-save">Сохранить</button>
+                <a href="{% url 'clients_list' %}" class="btn-cancel">Отменить</a>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Маска для телефона
+            Inputmask({
+                mask: "+7 (999) 999-99-99",
+                placeholder: "_",
+                showMaskOnHover: true,
+                showMaskOnFocus: true,
+                clearIncomplete: false,
+                autoUnmask: false
+            }).mask(document.querySelectorAll('input[data-mask="phone"]'));
+
+            // Маска для серии паспорта (4 цифры)
+            Inputmask({
+                mask: "9999",
+                placeholder: "_",
+                showMaskOnHover: true,
+                showMaskOnFocus: true,
+                clearIncomplete: false,
+                autoUnmask: false
+            }).mask(document.querySelectorAll('input[data-mask="passport_series"]'));
+
+            // Маска для номера паспорта (6 цифр)
+            Inputmask({
+                mask: "999999",
+                placeholder: "_",
+                showMaskOnHover: true,
+                showMaskOnFocus: true,
+                clearIncomplete: false,
+                autoUnmask: false
+            }).mask(document.querySelectorAll('input[data-mask="passport_number"]'));
+        });
+    </script>
+{% endblock %}
