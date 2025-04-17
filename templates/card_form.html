@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Добавить карту{% endblock %}
+
+{% block content %}
+<h2>Выпуск карты</h2>
+<form method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Выпустить</button>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Клиенты{% endblock %}
+
+{% block content %}
+<h2>Клиенты</h2>
+<form method="get" class="filter-form">
+  <input type="text" name="series" placeholder="Серия паспорта" value="{{ request.GET.series }}">
+  <input type="text" name="number" placeholder="Номер паспорта" value="{{ request.GET.number }}">
+  <button type="submit">Фильтровать</button>
+  <a href="{% url 'client_create' %}" class="btn">Добавить нового клиента</a>
+</form>
+
+<table class="table">
+  <thead>
+    <tr><th>ID</th><th>ФИО</th><th>Паспорт</th><th>Действия</th></tr>
+  </thead>
+  <tbody>
+    {% for client in clients %}
+      <tr>
+        <td>{{ client.pk }}</td>
+        <td>{{ client.passport.last_name }} {{ client.passport.first_name }}</td>
+        <td>{{ client.passport.series }} {{ client.passport.number }}</td>
+        <td><a href="{% url 'client_detail' client.pk %}">→</a></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">Нет клиентов</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

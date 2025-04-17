@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Клиент {{ client.pk }}{% endblock %}
+
+{% block content %}
+<h2>Клиент: {{ client.passport.last_name }} {{ client.passport.first_name }}</h2>
+
+<dl>
+  <dt>Дата рождения:</dt><dd>{{ client.passport.birth_date }}</dd>
+  <dt>Адрес регистрации:</dt><dd>{{ client.passport.registration_address }}</dd>
+  <dt>Телефон:</dt><dd>{{ client.passport.phone }}</dd>
+  <dt>Email:</dt><dd>{{ client.email }}</dd>
+  <dt>Статус паспорта:</dt>
+  <dd>
+    {% if client.passport.is_passport_valid %}
+      <span class="valid">Действителен</span>
+    {% else %}
+      <span class="invalid">Просрочен</span>
+    {% endif %}
+  </dd>
+</dl>
+
+<h3>Счета</h3>
+<ul>
+  {% for acct in client.account_requisites.all %}
+    <li>{{ acct.account_number }} ({{ acct.bank.bank_name }})</li>
+  {% empty %}
+    <li>Нет счетов</li>
+  {% endfor %}
+</ul>
+
+<div class="actions">
+  <a href="{% url 'create_card' client.pk %}" class="btn">Добавить карту</a>
+  <a href="{% url 'create_deposit' client.pk %}" class="btn">Оформить депозит</a>
+</div>
+{% endblock %}
