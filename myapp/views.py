@@ -4,7 +4,10 @@ from .forms import ClientForm
 from django.db.models import Q
 
 def home(request):
-    return render(request, 'home.html')
+    client_count = Client.objects.count()
+    return render(request, 'home.html', {
+        'client_count': client_count,
+    })
 
 def clients_list(request):
     passport_query = request.GET.get('passport', '').replace(' ', '').strip()
@@ -12,7 +15,6 @@ def clients_list(request):
     clients = Client.objects.all()
 
     if passport_query:
-        # Можно фильтровать по объединенной строке серия+номер
         clients = clients.filter(
             Q(passport_series__icontains=passport_query[:4]) &
             Q(passport_number__icontains=passport_query[4:])
@@ -22,8 +24,11 @@ def clients_list(request):
         )
 
     clients = clients.order_by('last_name', 'first_name', 'patronymic')
-
-    return render(request, 'clients/clients.html', {'clients': clients})
+    client_count = clients.count()
+    return render(request, 'clients/clients.html', {
+        'clients': clients,
+        'client_count': client_count
+    })
 
 def client_detail(request, client_id):
     client = get_object_or_404(Client, pk=client_id)

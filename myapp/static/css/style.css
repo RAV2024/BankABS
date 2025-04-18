@@ -40,6 +40,10 @@ header {
     height: 70px;
 }
 
+.refresh-logo {
+    cursor: pointer;
+}
+
 nav ul {
     list-style: none;
     padding: 0;
@@ -67,6 +71,107 @@ nav ul li a:active,
 nav ul li a:focus {
     color: #FF5722;
     outline: none;
+}
+
+/* home */
+
+.home-intro {
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.slider-container {
+  background: #eef1f5;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.slider .slide {
+  display: none;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.slider .slide.active {
+  display: block;
+  transition: opacity 0.5s ease;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 30px 0;
+}
+
+.stat-box {
+  background-color: #eaf2fd;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 150px;
+}
+
+.stat-box h3 {
+  font-size: 2.5em;
+  margin: 0;
+  color: #004080;
+}
+
+.stat-box p {
+  margin: 5px 0 0;
+  font-size: 1em;
+  color: #666;
+}
+
+
+/* home-slider */
+
+.features h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.features {
+  margin: 50px auto;
+  padding: 30px 0;
+}
+
+.features-swiper .swiper-slide {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  transition-property: transform;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.swiper-slide {
+  transition: opacity 0.6s ease-in-out;
+}
+
+.slide-caption {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  color: white;
+  font-size: 1.7em;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: white;
 }
 
 /* clients */

@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Банковская АБС{% endblock %}</title>
+    <title>{% block title %}Банковская АБС ДоРаГо{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+2v7Q2Ev8l/uTBzI1ZZz4aVGO0H/lob/77yMIA0" crossorigin="anonymous"></script>
-    {% block script %}{% endblock %}
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="{% static 'images/logo.png' %}" alt="Логотип" />
+            <img src="{% static 'images/new_logo.jpg' %}" alt="Логотип" class="refresh-logo" />
         </div>
         <nav>
             <ul>
@@ -37,8 +37,10 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2025 Банковская АБС ДоРаГо</p>
+            <p>© 2025 Банковская АБС "ДоРаГо". Все права защищены.</p>
         </div>
     </footer>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </body>
 </html>
