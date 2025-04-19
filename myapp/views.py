@@ -30,9 +30,15 @@ def clients_list(request):
         'client_count': client_count
     })
 
+from .utils import passport_needs_update
+
 def client_detail(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
-    return render(request, 'clients/client_detail.html', {'client': client})
+    is_invalid = passport_needs_update(client.birth_date, client.passport_issue_date)
+    return render(request, 'clients/client_detail.html', {
+        'client': client,
+        'passport_warning': is_invalid  # 👈 передаём результат проверки
+    })
 
 
 def add_client(request):
@@ -55,22 +61,67 @@ def add_client(request):
         'account_form': account_form
     })
 
+from .utils import passport_needs_update
 
 def create_account(request, client_id):
     client = get_object_or_404(Client, id=client_id)
+    passport_expired = passport_needs_update(client.birth_date, client.passport_issue_date)
+
     if request.method == 'POST':
         form = AccountForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and not passport_expired:
             account = form.save(commit=False)
             account.client = client
             account.save()
-            return redirect('client_detail', client_id=client.id)
+            return redirect('client_detail', client.id)
     else:
         form = AccountForm()
+
     return render(request, 'clients/create_account.html', {
         'form': form,
         'client': client,
+        'passport_expired': passport_expired,
     })
+
+def update_passport(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+
+    if request.method == 'POST':
+        form = ClientForm(request.POST, instance=client)
+        if form.is_valid():
+            form.save()
+            return redirect('client_detail', client_id)
+    else:
+        form = ClientForm(instance=client)
+
+    return render(request, 'clients/update_passport.html', {'form': form, 'client': client})
+
+def check_passport_validity(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+    is_invalid = passport_needs_update(client.birth_date, client.passport_issue_date)
+    return render(request, 'clients/client_detail.html', {
+        'client': client,
+        'passport_warning': is_invalid
+    })
+
+
+from .forms import UpdatePassportForm
+
+
+def update_passport(request, client_id):
+    client = Client.objects.get(id=client_id)
+
+    if request.method == 'POST':
+        form = UpdatePassportForm(request.POST, instance=client)
+        if form.is_valid():
+            form.save()
+            return redirect('client_detail', client_id=client.id)
+    else:
+        form = UpdatePassportForm(instance=client)
+
+    return render(request, 'clients/update_passport.html', {'form': form, 'client': client})
+
+
 
 
 

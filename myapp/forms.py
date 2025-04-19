@@ -57,10 +57,30 @@ class ClientForm(forms.ModelForm):
             raise ValidationError("Номер паспорта должен состоять из 6 цифр.")
         return digits
 
+    def clean(self):
+        cleaned_data = super().clean()
+        birth_date = cleaned_data.get("birth_date")
+        passport_issue_date = cleaned_data.get("passport_issue_date")
+
+        if birth_date and passport_issue_date:
+            from .utils import passport_needs_update
+            if passport_needs_update(birth_date, passport_issue_date):
+                raise ValidationError("Паспорт устарел. Пожалуйста, введите актуальные паспортные данные.")
+
 class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['currency', 'account_type']
+
+class UpdatePassportForm(ClientForm):
+    class Meta(ClientForm.Meta):
+        fields = [
+            'passport_series',
+            'passport_number',
+            'passport_issue_date',
+            'passport_issued_by',
+        ]
+
 
 
 

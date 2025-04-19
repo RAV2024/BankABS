@@ -6,8 +6,13 @@
 {% block content %}
 <div class="client-detail">
     <h2>Информация о клиенте</h2>
+
+    {% if passport_warning %}
+        <p style="color:red;"><strong>Паспорт недействителен. Пожалуйста, обновите паспортные данные.</strong></p>
+    {% endif %}
+
     <ul>
-        <li><strong>ФИО:</strong> {{ client.last_name }} {{ client.first_name }} {{ client.patronymic }} </li>
+        <li><strong>ФИО:</strong> {{ client.last_name }} {{ client.first_name }} {{ client.patronymic }}</li>
         <li><strong>Дата рождения:</strong> {{ client.birth_date }}</li>
         <li><strong>Адрес:</strong> {{ client.address }}</li>
         <li><strong>Телефон:</strong> {{ client.phone|default:"—" }}</li>
@@ -16,20 +21,29 @@
         <li><strong>Дата выдачи:</strong> {{ client.passport_issue_date }}</li>
         <li><strong>Кем выдан:</strong> {{ client.passport_issued_by }}</li>
     </ul>
+
+    {% if passport_warning %}
+        <a href="{% url 'update_passport' client.id %}">Обновить паспорт</a>
+    {% endif %}
+
     <h2>Счета клиента</h2>
-    <h2>Счета клиента</h2>
-<ul>
-    {% for account in client.accounts.all %}
-        <li>
-            <strong>Номер:</strong> {{ account.account_number }}<br>
-            <strong>Тип:</strong> {{ account.get_account_type_display }}<br>
-            <strong>Валюта:</strong> {{ account.get_currency_display }}
-        </li>
-    {% empty %}
-        <li>Счета отсутствуют.</li>
-    {% endfor %}
-</ul>
-<a href="{% url 'create_account' client.id %}">+ Добавить счёт</a><br>
-<a href="{% url 'clients_list' %}">← Назад к списку клиентов</a>
+    <ul>
+        {% for account in client.accounts.all %}
+            <li>
+                <strong>Номер:</strong> {{ account.account_number }}<br>
+                <strong>Тип:</strong> {{ account.get_account_type_display }}<br>
+                <strong>Валюта:</strong> {{ account.get_currency_display }}
+            </li>
+        {% empty %}
+            <li>Счета отсутствуют.</li>
+        {% endfor %}
+    </ul>
+
+    {% if not passport_warning %}
+        <a href="{% url 'create_account' client.id %}">+ Добавить счёт</a><br>
+    {% endif %}
+
+    <a href="{% url 'clients_list' %}">← Назад к списку клиентов</a>
 </div>
 {% endblock %}
+

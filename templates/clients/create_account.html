@@ -3,10 +3,22 @@
 
 {% block content %}
 <h2>Создание счёта для {{ client.last_name }} {{ client.first_name }}</h2>
+
+{% if passport_expired %}
+<p style="color:red; font-weight: bold;">
+    Паспорт недействителен. Пожалуйста, обновите паспортные данные.
+</p>
+{% endif %}
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Создать</button>
+
+    <button type="submit" {% if passport_expired %}disabled style="background-color: #ccc; color: #666; cursor: not-allowed;"{% endif %}>
+        Создать
+    </button>
 </form>
+
 <a href="{% url 'client_detail' client.id %}">← Назад</a>
 {% endblock %}
+
