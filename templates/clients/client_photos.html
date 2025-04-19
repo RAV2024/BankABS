@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Все фото клиента{% endblock %}
+
+{% block content %}
+<h2>Все фотографии клиента: {{ client.last_name }} {{ client.first_name }}</h2>
+
+{% if photos %}
+    {% for photo in photos %}
+        <div>
+            <img src="{{ photo.image.url }}" style="max-width: 200px; margin: 10px;">
+            <div>
+                <a href="{% url 'delete_photo' photo.id %}">Удалить фото</a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Фотографии отсутствуют.</p>
+{% endif %}
+
+<a href="{% url 'client_detail' client.id %}">← Назад</a>
+<br>
+<a href="{% url 'upload_photo' client.id %}">Добавить фото</a>  <!-- Ссылка на форму добавления фото -->
+{% endblock %}
+

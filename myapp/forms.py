@@ -1,5 +1,5 @@
 from django import forms
-from .models import Client,Account
+from .models import Client,Account,Photo
 from django.core.exceptions import ValidationError
 import re
 
@@ -80,6 +80,23 @@ class UpdatePassportForm(ClientForm):
             'passport_issue_date',
             'passport_issued_by',
         ]
+
+from PIL import Image
+from io import BytesIO
+from django import forms
+from .models import Photo
+
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = Photo  # Ссылается на модель Photo
+        fields = ['image']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Скрытый input
+        self.fields['image'].widget.attrs.update({'style': 'display:none;'})
+
+
 
 
 

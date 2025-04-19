@@ -31,14 +31,41 @@ def clients_list(request):
     })
 
 from .utils import passport_needs_update
+from .forms import PhotoForm
+from .models import Photo
 
 def client_detail(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
-    is_invalid = passport_needs_update(client.birth_date, client.passport_issue_date)
+    passport_warning = passport_needs_update(client.birth_date, client.passport_issue_date)
+
+    photo_form = PhotoForm()
+    photo_error = None
+
+    if request.method == 'POST':
+        photo_form = PhotoForm(request.POST, request.FILES)
+        if photo_form.is_valid():
+            photo = photo_form.save(commit=False)
+            photo.client = client
+            try:
+                photo.full_clean()
+                photo.save()
+                print(f"Фотография сохранена для клиента {client_id}, путь: {photo.image.url}")  # Выводим путь изображения в консоль
+                return redirect('client_detail', client_id=client.id)
+            except ValidationError as e:
+                photo_error = e.message_dict.get('image', ['Ошибка при загрузке фото'])[0]
+
+    if client.photos.exists():
+        print(client.photos.first().image.url)  # Выводим путь к изображению в консоль
+    else:
+        print("У клиента нет фотографий")
+
     return render(request, 'clients/client_detail.html', {
         'client': client,
-        'passport_warning': is_invalid  # 👈 передаём результат проверки
+        'passport_warning': passport_warning,
+        'photo_form': photo_form,
+        'photo_error': photo_error,
     })
+
 
 
 def add_client(request):
@@ -108,18 +135,62 @@ def check_passport_validity(request, client_id):
 from .forms import UpdatePassportForm
 
 
-def update_passport(request, client_id):
-    client = Client.objects.get(id=client_id)
+def client_photos(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+    photos = client.photos.all()
+    return render(request, 'clients/client_photos.html', {
+        'client': client,
+        'photos': photos,
+    })
+
+
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from io import BytesIO
+from django.contrib import messages
+from .utils import passport_needs_update
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Client, Photo
+from .forms import PhotoForm
+
+def upload_photo(request, client_id):
+    client = get_object_or_404(Client, pk=client_id)
 
     if request.method == 'POST':
-        form = UpdatePassportForm(request.POST, instance=client)
+        form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('client_detail', client_id=client.id)
-    else:
-        form = UpdatePassportForm(instance=client)
+            photo = form.save(commit=False)
+            photo.client = client
+            photo.save()
+        else:
+            # 👉 Вывод ошибки DPI или другой валидационной ошибки
+            photo_error = form.errors.get('image')
+            return render(request, 'client_detail.html', {
+                'client': client,
+                'photo_form': form,
+                'photo_error': photo_error,
+                'passport_warning': client.is_passport_expired()  # если есть
+            })
 
-    return render(request, 'clients/update_passport.html', {'form': form, 'client': client})
+    return redirect('client_detail', client_id=client_id)
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Photo
+
+def delete_photo(request, photo_id):
+    photo = get_object_or_404(Photo, id=photo_id)
+
+    # Проверим, если запрос является POST, удалим фото
+    if request.method == 'POST':
+        # Удаление фотографии
+        photo.delete()
+
+    # Перенаправление на страницу клиента
+    return redirect('client_detail', client_id=photo.client.id)
+
+
+
 
 
 

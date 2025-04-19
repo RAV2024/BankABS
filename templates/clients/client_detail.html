@@ -12,6 +12,29 @@
     {% endif %}
 
     <ul>
+        <li>
+            <strong>Фотография:</strong><br>
+            {% if client.photos.exists %}
+                <img src="{{ client.photos.first.image.url }}" alt="Фото клиента" width="200"><br>
+                <!-- Ссылка на удаление фото -->
+                <form action="{% url 'delete_photo' client.photos.first.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="color:red; background:none; border:none; cursor:pointer;">Удалить фото</button>
+                </form>
+            {% else %}
+                <a href="#" id="add-photo-link">Добавить фото</a>
+            {% endif %}
+
+            <form id="photo-form" method="post" enctype="multipart/form-data" action="{% url 'upload_photo' client.id %}" style="display:inline;">
+                {% csrf_token %}
+                {{ photo_form.image }}
+            </form>
+
+            {% if photo_error %}
+                <p style="color:red;"><strong>{{ photo_error }}</strong></p>
+            {% endif %}
+        </li>
+
         <li><strong>ФИО:</strong> {{ client.last_name }} {{ client.first_name }} {{ client.patronymic }}</li>
         <li><strong>Дата рождения:</strong> {{ client.birth_date }}</li>
         <li><strong>Адрес:</strong> {{ client.address }}</li>
@@ -43,7 +66,30 @@
         <a href="{% url 'create_account' client.id %}">+ Добавить счёт</a><br>
     {% endif %}
 
+    <br>
     <a href="{% url 'clients_list' %}">← Назад к списку клиентов</a>
 </div>
-{% endblock %}
 
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addPhotoButton = document.getElementById('add-photo-link');
+        const fileInput = document.getElementById('id_image');
+        const photoForm = document.getElementById('photo-form');
+
+        if (addPhotoButton && fileInput) {
+            addPhotoButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length > 0) {
+                    photoForm.submit();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}
