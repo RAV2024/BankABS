@@ -26,35 +26,51 @@ class Client(models.Model):
         verbose_name_plural = 'Клиенты'
 
 
+from django.utils.crypto import get_random_string
+
+CURRENCY_CODES = {
+    'RUB': '810',
+    'USD': '840',
+    'EUR': '978',
+    'CNY': '156',
+}
+
+ACCOUNT_NUMBER_PREFIX = '40803'  # 1-5 цифры фиксированы
 
 class Account(models.Model):
-    ACCOUNT_TYPE_CHOICES_INDIVIDUAL = [
+    CURRENCY_CHOICES = [
+        ('RUB', 'Рубли'),
+        ('USD', 'Доллары'),
+        ('EUR', 'Евро'),
+        ('CNY', 'Юани'),
+    ]
+
+    ACCOUNT_TYPE_CHOICES = [
         ('current', 'Текущий'),
+        ('settlement', 'Расчетный'),
         ('credit', 'Кредитный'),
         ('deposit', 'Депозитный'),
-        ('saving', 'Накопительный'),
-        ('budget', 'Бюджетный'),
+        ('budget', 'Бюджетный (соц. выплаты)'),
+        ('standard', 'Стандартный расчетный'),
+        ('active', 'Активный'),
+        ('passive', 'Пассивный'),
     ]
 
-    ACCOUNT_TYPE_CHOICES_LEGAL = [
-        ('settlement', 'Расчетный'),
-        ('currency', 'Валютный'),
-        ('correspondent', 'Корреспондентский'),
-        ('trust', 'Доверительного управления'),
-        ('special', 'Специальный'),
-        ('deposit', 'Депозитный'),
-        ('budget', 'Бюджетный'),
-    ]
-
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='accounts')
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='accounts')
     account_number = models.CharField(max_length=20, unique=True, verbose_name="Номер счета")
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='RUB', verbose_name="Валюта")
+    account_type = models.CharField(max_length=30, choices=ACCOUNT_TYPE_CHOICES, verbose_name="Тип счета")
     is_legal_entity = models.BooleanField(default=False, verbose_name="Юридическое лицо")
-    account_type = models.CharField(max_length=30, verbose_name="Тип счета")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.account_number} ({self.get_account_type_display()})"
+    def save(self, *args, **kwargs):
+        if not self.account_number:
+            currency_code = CURRENCY_CODES.get(self.currency, '810')
+            rand_digit = get_random_string(length=1, allowed_chars='0123456789')
+            fixed_part = f'{ACCOUNT_NUMBER_PREFIX}{currency_code}{rand_digit}0000'
 
-    class Meta:
-        verbose_name = 'Счет'
-        verbose_name_plural = 'Счета'
+            account_count = Account.objects.count() + 1
+            sequential_number = str(account_count).zfill(7)
+
+            self.account_number = fixed_part + sequential_number
+        super().save(*args, **kwargs)

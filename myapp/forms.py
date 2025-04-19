@@ -1,5 +1,5 @@
 from django import forms
-from .models import Client
+from .models import Client,Account
 from django.core.exceptions import ValidationError
 import re
 
@@ -56,6 +56,12 @@ class ClientForm(forms.ModelForm):
         if not re.fullmatch(r'\d{6}', digits):
             raise ValidationError("Номер паспорта должен состоять из 6 цифр.")
         return digits
+
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['currency', 'account_type']
+
 
 
 

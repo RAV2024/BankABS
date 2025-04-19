@@ -8,7 +8,10 @@
 
         <form method="post" class="client-form">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ client_form.as_p }}
+
+            <h3>Создание счёта</h3>
+            {{ account_form.as_p }}
             <div class="form-buttons">
                 <button type="submit" class="btn-save">Сохранить</button>
                 <a href="{% url 'clients_list' %}" class="btn-cancel">Отменить</a>

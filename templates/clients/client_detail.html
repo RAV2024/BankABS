@@ -17,6 +17,19 @@
         <li><strong>Кем выдан:</strong> {{ client.passport_issued_by }}</li>
     </ul>
     <h2>Счета клиента</h2>
-    <a href="{% url 'clients_list' %}">← Назад к списку клиентов</a>
+    <h2>Счета клиента</h2>
+<ul>
+    {% for account in client.accounts.all %}
+        <li>
+            <strong>Номер:</strong> {{ account.account_number }}<br>
+            <strong>Тип:</strong> {{ account.get_account_type_display }}<br>
+            <strong>Валюта:</strong> {{ account.get_currency_display }}
+        </li>
+    {% empty %}
+        <li>Счета отсутствуют.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'create_account' client.id %}">+ Добавить счёт</a><br>
+<a href="{% url 'clients_list' %}">← Назад к списку клиентов</a>
 </div>
 {% endblock %}
